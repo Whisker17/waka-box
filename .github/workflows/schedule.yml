@@ -2,7 +2,8 @@ name: Update Gist
 
 on:
   push:
-    branch: master
+    branches:
+        - master
 
   schedule:
     - cron: "0 */3 * * *"
@@ -11,11 +12,11 @@ jobs:
   update-gist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - name: Install
         run: npm ci
       - name: Update gist
-        run: node ./index.js  --unhandled-rejections=strict
+        run: node ./index.js  
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GIST_ID: 614c9ba7c639b6097e9d4a689dd8e0f9

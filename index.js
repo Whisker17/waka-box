@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { WakaTimeClient, RANGE } = require("wakatime-client");
-const { Octokit } = require('@octokit/rest')
+const Octokit = require("@octokit/rest");
 
 const {
   GIST_ID: gistId,
@@ -13,7 +13,6 @@ const wakatime = new WakaTimeClient(wakatimeApiKey);
 const octokit = new Octokit({ auth: `token ${githubToken}` });
 
 async function main() {
-  console.log("entry main>>>>>>>>>");
   const stats = await wakatime.getMyStats({ range: RANGE.LAST_7_DAYS });
   await updateGist(stats);
 }
@@ -25,7 +24,7 @@ async function updateGist(stats) {
   } catch (error) {
     console.error(`Unable to get gist\n${error}`);
   }
-  console.log("gist>>>>>>>>>", gist);
+
   const lines = [];
   for (let i = 0; i < Math.min(stats.data.languages.length, 6); i++) {
     const data = stats.data.languages[i];
@@ -34,14 +33,12 @@ async function updateGist(stats) {
     const line = [
       name.padEnd(11),
       time.padStart(14) + " ",
-      unicodeProgressBar(percent),
+      unicodeProgressBar(percent + 15),
       String(percent.toFixed(1)).padStart(5) + "%"
     ];
 
     lines.push(line.join(" "));
   }
-  console.log("lines>>>>>>>>>", lines);
-  if (lines.length == 0) return;
 
   try {
     // Get original filename to update that same file
@@ -55,7 +52,6 @@ async function updateGist(stats) {
         }
       }
     });
-    console.log("filename>>>>>>>>>", filename);
   } catch (error) {
     console.error(`Unable to update gist\n${error}`);
   }
@@ -80,7 +76,7 @@ const bar_styles = [
   "⚪⚫"
 ];
 
-function unicodeProgressBar(p, style = 7, min_size = 24, max_size = 24) {
+function unicodeProgressBar(p, style = 7, min_size = 20, max_size = 20) {
   let d;
   let full;
   let m;
